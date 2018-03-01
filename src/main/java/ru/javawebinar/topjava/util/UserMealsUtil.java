@@ -12,10 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * GKislin
- * 31.05.2015.
- */
+
 public class UserMealsUtil {
     public static void main(String[] args) {
 
@@ -27,43 +24,26 @@ public class UserMealsUtil {
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
         );
-    /*    getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);*/
-
 
         List<UserMealWithExceed> filteredMealsWithExceeded = getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-
-       filteredMealsWithExceeded.forEach(System.out::println);
-
-
-       }
-
-
-//        .toLocalDate();
-//        .toLocalTime();
+        filteredMealsWithExceeded.forEach(System.out::println);
+    }
 
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with correctly exceeded field
 
-        Map<LocalDate, Integer> map = mealList.stream()
-                .collect(Collectors.groupingBy(t -> t.getDateTime().toLocalDate(),
-                        Collectors.summingInt(UserMeal::getCalories)));
+        Map<LocalDate, Integer> caloriesSumByDate = mealList.stream()
+                .collect(Collectors.groupingBy(userMeal -> userMeal .getDateTime().toLocalDate(), //фильтруем все по дате. collect - это набираем набор действий, до термальной опирации
+                        Collectors.summingInt(UserMeal::getCalories))); //получаем сумму каллорий по дням. Это термальная опирация! Все делать дальше ничего нельзя.
 
 
-        return mealList.stream()
-                .filter(t -> TimeUtil.isBetween(t.getDateTime().toLocalTime(), startTime, endTime))
-                .map(t -> new UserMealWithExceed(t.getDateTime(), t.getDescription(), t.getCalories(),
-                        map.get(t.getDateTime().toLocalDate()) > caloriesPerDay))
-                .collect(Collectors.toList());
-
-
+        return mealList.stream() //стрим где получим результат что нам нужен
+                .filter(t -> TimeUtil.isBetween(t.getDateTime().toLocalTime(), startTime, endTime)) //фильтруем колекцию по вермени
+                .map(userMeal  -> new UserMealWithExceed(userMeal .getDateTime(), userMeal .getDescription(), userMeal .getCalories(),
+                        caloriesSumByDate.get(userMeal .getDateTime().toLocalDate()) > caloriesPerDay)) //берем сумму калорий в день из caloriesSumByDate и сравниваем с нормой >
+                .collect(Collectors.toList()); //collect - получить данные не в виде потока, а в виде обычной коллекции, например, ArrayList или HashSet
     }
-
-
 }
-
-
-
-
 
 

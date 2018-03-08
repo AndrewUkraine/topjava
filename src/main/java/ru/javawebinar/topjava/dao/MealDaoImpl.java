@@ -2,54 +2,74 @@ package ru.javawebinar.topjava.dao;
 import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MealDaoImpl implements MealDao {
 
-    List<Meal> mealsDao = Arrays.asList(
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 100),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 100),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-            new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 520),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 10, 0), "Завтрак", 100),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 1, 20, 0), "Ужин", 100),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 2, 10, 0), "Завтрак", 1000),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 2, 13, 0), "Обед", 1000),
-            new Meal(LocalDateTime.of(2015, Month.JUNE, 2, 20, 0), "Ужин", 1000)
+    private static AtomicInteger countMeals = new AtomicInteger(1);
+    private ConcurrentMap<Integer, Meal> mealConcurrentMap = new ConcurrentHashMap<>();
 
-    );
-
-
-    @Override
-    public Meal create(Meal meal) {
-        return null;
+    {
+        List<Meal> mealsDao = Arrays.asList(
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
+                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
+        );
+//        for (Meal m: mealsDao) {
+//            mealConcurrentMap.put(countMeals.get(), m);
+//            m.setId(countMeals.get());
+//            countMeals.getAndIncrement();//аналог кода снизу, также использует счётчик метода create!
+//        }
+        mealsDao.forEach(this::create);
     }
 
     @Override
-    public void delete(int id) {
+    public void create(Meal meal) {
+        int id = countMeals.getAndIncrement();
+        meal.setId(id);
+        mealConcurrentMap.put(id, meal);
+    }
 
+    @Override
+    public void remove(int id) {
+        for (int i: mealConcurrentMap.keySet()) {
+            if(id != 0 && id == i){
+                mealConcurrentMap.remove(id);
+            }
+        }
     }
 
     @Override
     public void update(Meal meal) {
-
+        mealConcurrentMap.put(meal.getId(), meal);
     }
 
     @Override
-    public Meal getById(int id) {
-        return null;
+    public Meal get(int id) {
+        Meal meal = null;
+        for (int i: mealConcurrentMap.keySet()) {
+            if (id != 0 && id == i){
+                meal = mealConcurrentMap.get(id);
+            }
+        }
+        return meal;
     }
 
     @Override
     public List<Meal> getList() {
-        return mealsDao.stream()
-                .map(meal -> new Meal(meal.getDateTime(), meal.getDescription(), meal.getCalories()))
-                .collect(Collectors.toList());
+        List<Meal> resultList = new ArrayList<>();
+        for (Meal meal: mealConcurrentMap.values()) {
+            resultList.add(new Meal(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories()));
+        }
+        return resultList;
     }
-
 }

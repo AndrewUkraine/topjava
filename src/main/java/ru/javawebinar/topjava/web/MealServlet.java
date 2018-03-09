@@ -35,10 +35,15 @@ public class MealServlet extends HttpServlet {
 
 
             request.setAttribute("meals", MealsUtil.getFilteredWithExceeded(mealDaoImpl.getList(), LocalTime.MIN, LocalTime.MAX, 2000));
-
-
+        request.getRequestDispatcher("meals.jsp").forward(request, response);
 
         }
+}
 
 
-    }
+        /*List<MealWithExceed> mealsWithExceeded = MealsUtil.getFilteredWithExceeded(mealDaoImpl.getList(), LocalTime.MIN, LocalTime.MAX, 2000);
+
+        request.setAttribute("meals", mealsWithExceeded);
+        request.setAttribute("formatter", formatter);
+        request.getRequestDispatcher("meals.jsp").forward(request, response);
+*/

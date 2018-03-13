@@ -1,19 +1,15 @@
 package ru.javawebinar.topjava.util;
-
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-public class UsersUtil {
+public class UserUtil {
 
     public static final List<User> USERS = Arrays.asList(
-            new User(null, "User_1", "User@mail.ru", "password", Role.ROLE_USER ),
-            new User(null, "User_1", "User@mail.ru", "password", Role.ROLE_USER ),
+            new User(null, "User_1", "User1@mail.ru", "password1", Role.ROLE_USER ),
+            new User(null, "User_2", "User2@mail.ru", "password2", Role.ROLE_USER ),
+            new User(null, "User_3", "User3@mail.ru", "password3", Role.ROLE_USER )
 
     );
 
@@ -21,9 +17,3 @@ public class UsersUtil {
 
 }
 
- super(id, name);
-         this.email = email;
-         this.password = password;
-         this.caloriesPerDay = caloriesPerDay;
-         this.enabled = enabled;
-         this.roles = roles;

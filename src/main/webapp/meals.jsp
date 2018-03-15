@@ -47,7 +47,30 @@
                 <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
-    </table>
+
+    </table border="1" cellpadding="8" cellspacing="0">
+    <h2>Filter by Date/Time</h2>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        <dl>
+            <dt>From Date:</dt>
+            <dd><input type="date" name="fromDate"></dd>
+        </dl>
+        <dl>
+            <dt>To Date:</dt>
+            <dd><input type="date" name="toDate"></dd>
+        </dl>
+        <dl>
+            <dt>From Time:</dt>
+            <dd><input type="time" name="fromTime"></dd>
+        </dl>
+        <dl>
+            <dt>To Time:</dt>
+            <dd><input type="time" name="toTime"></dd>
+        </dl>
+        <button type="submit">Accept</button>
+        <button onclick="window.history.back()" type="button">Cancel</button>
+    </form>
 </section>
 </body>
 </html>

@@ -5,9 +5,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
+import ru.javawebinar.topjava.repository.mock.InMemoryUserRepositoryImpl;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
 
 public class SpringMain {
@@ -18,8 +22,11 @@ public class SpringMain {
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email", "password", Role.ROLE_ADMIN));
 
-            MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            //mealRestController.create(new Meal(null, null, "fdfdfd", 123, 1 ));
+
+           MealRestController mealRestController = appCtx.getBean(MealRestController.class);
+        //System.out.println(mealRestController.create(new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 300, 1)));
+
+
         }
     }
 }

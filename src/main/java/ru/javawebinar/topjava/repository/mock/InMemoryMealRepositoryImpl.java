@@ -18,25 +18,25 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(meal -> save(meal, meal.getUserID()));
+        MealsUtil.MEALS.forEach(meal -> save(meal, meal.getUserId()));
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserID(userId);
+            meal.setUserId(userId);
             repository.put(meal.getId(), meal);
             return meal;
         }
         // treat case: update, but absent in storage!!
-        return meal.getUserID()== userId ? repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal): null;
+        return meal.getUserId()== userId ? repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal): null;
     }
 
     @Override
     public boolean delete(int id, int userId) {
         Meal meal = repository.get(id);
-        if(meal != null && meal.getUserID() == userId){
+        if(meal != null && meal.getUserId() == userId){
             repository.remove(id);
             return true;
         }else return false;
@@ -45,7 +45,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         Meal meal = repository.get(id);
-        if (meal!=null|| meal.getUserID()==userId){
+        if (meal!=null|| meal.getUserId()==userId){
             return meal;
         }
        else return null;
@@ -55,7 +55,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     public Collection<Meal> getAll(int userId) {
 
         return repository.values().stream()
-                .filter(meal -> meal.getUserID()==userId)
+                .filter(meal -> meal.getUserId()==userId)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }

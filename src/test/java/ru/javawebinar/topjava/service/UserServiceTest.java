@@ -86,6 +86,8 @@ public class UserServiceTest {
         assertMatch(service.get(USER_ID), updated);
     }
 
+
+
     @Test
     public void getAll() throws Exception {
         List<User> all = service.getAll();

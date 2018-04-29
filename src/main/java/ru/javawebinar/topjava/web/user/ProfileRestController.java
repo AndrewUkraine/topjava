@@ -2,12 +2,14 @@ package ru.javawebinar.topjava.web.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.User;
 
 @RestController
 @RequestMapping(ProfileRestController.REST_URL)
+
 public class ProfileRestController extends AbstractUserController {
     static final String REST_URL = "/rest/profile";
 

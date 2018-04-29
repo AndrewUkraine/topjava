@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.web.user;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.User;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(AdminRestController.REST_URL)
+
 public class AdminRestController extends AbstractUserController {
     static final String REST_URL = "/rest/admin/users";
 

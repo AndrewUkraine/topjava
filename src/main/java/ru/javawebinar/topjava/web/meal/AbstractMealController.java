@@ -27,7 +27,7 @@ public abstract class AbstractMealController {
     public Meal get(int id) {
         int userId = AuthorizedUser.id();
         log.info("get meal {} for user {}", id, userId);
-        return service.get(id, userId);
+        return service.get(id,      userId);
     }
 
     public void delete(int id) {
@@ -43,6 +43,7 @@ public abstract class AbstractMealController {
     }
 
     public Meal create(Meal meal) {
+        meal.setId(null );
         int userId = AuthorizedUser.id();
         checkNew(meal);
         log.info("create {} for user {}", meal, userId);
@@ -50,6 +51,7 @@ public abstract class AbstractMealController {
     }
 
     public void update(Meal meal, int id) {
+        meal.setId(id);
         int userId = AuthorizedUser.id();
         assureIdConsistent(meal, id);
         log.info("update {} for user {}", meal, userId);

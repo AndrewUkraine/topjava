@@ -77,6 +77,8 @@
                     </div>
                 </form>
             </div>
+
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                     <span class="fa fa-close" aria-hidden="true"></span>

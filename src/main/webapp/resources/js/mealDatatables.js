@@ -2,28 +2,27 @@ var ajaxUrl = "ajax/profile/meals/";
 var datatableApi;
 
 function updateTable() {
-       $.ajax({
-                type: "POST",
-                url: ajaxUrl + "filter",
-                data: $("#filter").serialize(),
-                success: updateTableByData
-        });
-    }
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + "filter",
+        data: $("#filter").serialize(),
+        success: updateTableByData
+    });
+}
 
-// $(document).ready(function () {
 $(function () {
     datatableApi = $("#datatable").DataTable({
         "paging": false,
         "info": true,
         "columns": [
             {
-                "dateTime": "dateTime"
+                "data": "dateTime"
             },
             {
-                "description": "description"
+                "data": "description"
             },
             {
-                "calories": "calories"
+                "data": "calories"
             },
             {
                 "defaultContent": "Edit",
@@ -37,7 +36,7 @@ $(function () {
         "order": [
             [
                 0,
-                "asc"
+                "desc"
             ]
         ]
     });

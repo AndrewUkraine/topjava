@@ -64,7 +64,7 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     public void updateNotFound() throws Exception {
         thrown.expect(NotFoundException.class);
         thrown.expectMessage(containsString(ErrorType.DATA_NOT_FOUND.name()));
-        thrown.expectMessage(containsString(NotFoundException.NOT_FOUND_EXCEPTION));
+      thrown.expectMessage(containsString(NotFoundException.NOT_FOUND_EXCEPTION));
         thrown.expectMessage(containsString(String.valueOf(MEAL1_ID)));
         service.update(MEAL1, ADMIN_ID);
     }
